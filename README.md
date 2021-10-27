@@ -45,6 +45,9 @@ rm PE_R2.fastq PE_R1.fastq MP_R1.fastq MP_R2.fastq
  ls trimmed_fastq/* | xargs -P 4 -tI{} fastqc -o fastqc_trimmed {}
  multiqc -o multiqc_trimmed fastqc_trimmed
 ```
+Сравним полученные данные для изначальных и форматированных данных:
+![](https://github.com/ruanmik/hse21_hw1/blob/main/pics/first.png)
+
 С помощью программы “platanus assemble” собираем контиги из подрезанных чтений. 
 ```
 time platanus assemble -o Poil -f trimmed_fastq/PE_R1.fastq.trimmed trimmed_fastq/PEe_R2.fastq.trimmed 2> assemble.log
