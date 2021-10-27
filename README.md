@@ -46,11 +46,22 @@ rm PE_R2.fastq PE_R1.fastq MP_R1.fastq MP_R2.fastq
  multiqc -o multiqc_trimmed fastqc_trimmed
 ```
 Сравним полученные данные для изначальных и форматированных данных:
-![](https://github.com/ruanmik/hse21_hw1/blob/main/pics/first.png)
 
+До:
+![](https://github.com/ruanmik/hse21_hw1/blob/main/pics/multy_first.png)
+После:
+![](https://github.com/ruanmik/hse21_hw1/blob/main/pics/last1.png)
+До:
+![](https://github.com/ruanmik/hse21_hw1/blob/main/pics/first.png)
+После:
+![](https://github.com/ruanmik/hse21_hw1/blob/main/pics/last2.png)
+До:
+![](https://github.com/ruanmik/hse21_hw1/blob/main/pics/first1.png)
+После:
+![](https://github.com/ruanmik/hse21_hw1/blob/main/pics/last3.png)
 С помощью программы “platanus assemble” собираем контиги из подрезанных чтений. 
 ```
-time platanus assemble -o Poil -f trimmed_fastq/PE_R1.fastq.trimmed trimmed_fastq/PEe_R2.fastq.trimmed 2> assemble.log
+time platanus assemble -o Poil -f trimmed_fastq/PE_R1.fastq.trimmed trimmed_fastq/PE_R2.fastq.trimmed 2> assemble.log
 ```
 Проанализируем полученные контиги. Колаб с кодом рассположен по [ссылке](https://colab.research.google.com/drive/1Mh5Dg8s46z7S-RBLazIfCR_Q55jgIMMV?usp=sharing)
 
@@ -72,12 +83,19 @@ rm -r max_scaff.txt
 В колабе посчитаем количество гэпов и их общую длину. 
 Теперь с помощью программы “ platanus gap_close” уменьшим количество гэпов
 ```
-time platanus gap_close -o Poil -c Poil_scaffold.fa -IP1 trimmed_fastq/PE_R1.fastq.trimmed trimmed_fastq/PEe_R2.fastq.trimmed -OP2 trimmed_fastq/MP_R1.fastq.int_trimmed  trimmed_fastq/MP_R2.fastq.int_trimmed 2> gapclose.log
- time platanus gap_close -o Poil -c Poil_scaffold.fa -IP1 trimmed_fastq/PE_R1.fastq.trimmed trimmed_fastq/PEe_R2.fastq.trimmed -OP2 trimmed_fastq/MP_R1.fastq.int_trimmed  trimmed_fastq/MP_R2.fastq.int_trimmed 2> gapclose.log
+time platanus gap_close -o Poil -c Poil_scaffold.fa -IP1 trimmed_fastq/PE_R1.fastq.trimmed trimmed_fastq/PE_R2.fastq.trimmed -OP2 trimmed_fastq/MP_R1.fastq.int_trimmed  trimmed_fastq/MP_R2.fastq.int_trimmed 2> gapclose.log
+
 ```
 Удалим папку `trimmed_fastq`, тк эти файлы нам больше не нужны. 
 
 ```
 rm -rf trimmed_fastq/
 ```
+Запишем в файл информацию о самом длинном скафолде
+```
+echo scaffold1_cov231 > max__scaff.txt
+seqtk subseq Poil_gapClosed.fa max__scaff.txt > max__scaff.fa
+rm -r max__scaff.txt
+```
+
 В колабе снова посчитаем количество гэпов и их общую длину. 
